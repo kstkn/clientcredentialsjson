@@ -10,7 +10,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 	"strings"
 
 	"golang.org/x/oauth2"
@@ -35,7 +34,7 @@ type Config struct {
 	Scopes []string
 
 	// EndpointParams specifies additional parameters for requests to the token endpoint.
-	EndpointParams url.Values
+	EndpointParams map[string]string
 }
 
 // Token uses client credentials to retrieve a token.
@@ -90,7 +89,7 @@ func (c *tokenSource) Token() (*oauth2.Token, error) {
 		if _, ok := data[k]; ok && k != "grant_type" {
 			return nil, fmt.Errorf("oauth2: cannot overwrite parameter %q", k)
 		}
-		data[k] = strings.Join(p, " ")
+		data[k] = p
 	}
 
 	tk, err := internal.RetrieveToken(c.ctx, c.conf.ClientID, c.conf.ClientSecret, c.conf.TokenURL, data)

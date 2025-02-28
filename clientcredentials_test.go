@@ -10,7 +10,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"testing"
 )
 
@@ -20,16 +19,8 @@ func newConf(serverURL string) *Config {
 		ClientSecret:   "CLIENT_SECRET",
 		Scopes:         []string{"scope1", "scope2"},
 		TokenURL:       serverURL + "/token",
-		EndpointParams: url.Values{"audience": {"audience1"}},
+		EndpointParams: map[string]string{"audience": "audience1"},
 	}
-}
-
-type mockTransport struct {
-	rt func(req *http.Request) (resp *http.Response, err error)
-}
-
-func (t *mockTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
-	return t.rt(req)
 }
 
 func TestTokenSourceGrantTypeOverride(t *testing.T) {
@@ -52,13 +43,11 @@ func TestTokenSourceGrantTypeOverride(t *testing.T) {
 		w.Write([]byte(`{"access_token": "90d64460d14870c08c81352a05dedd3465940a7c", "token_type": "bearer"}`))
 	}))
 	config := &Config{
-		ClientID:     "CLIENT_ID",
-		ClientSecret: "CLIENT_SECRET",
-		Scopes:       []string{"scope"},
-		TokenURL:     ts.URL + "/token",
-		EndpointParams: url.Values{
-			"grant_type": {wantGrantType},
-		},
+		ClientID:       "CLIENT_ID",
+		ClientSecret:   "CLIENT_SECRET",
+		Scopes:         []string{"scope"},
+		TokenURL:       ts.URL + "/token",
+		EndpointParams: map[string]string{"grant_type": wantGrantType},
 	}
 	token, err := config.TokenSource(context.Background()).Token()
 	if err != nil {

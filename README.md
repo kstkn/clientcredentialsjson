@@ -17,13 +17,14 @@ import (
 
 func main() {
 	cfg := &clientcredentialsjson.Config{
-		ClientID:       clientID,
-		ClientSecret:   clientSecret,
-		TokenURL:       tokenURL,
-		EndpointParams: make(url.Values),
+		ClientID:       "clientID",
+		ClientSecret:   "clientSecret",
+		TokenURL:       "https://tokenURL",
+		EndpointParams: map[string]string{
+			"username": "username",
+			"password": "password",
+        },
 	}
-	cfg.EndpointParams.Set("username", username)
-	cfg.EndpointParams.Set("password", password)
 
 	token, err := cfg.Token(context.Background())
 	fmt.Println(token, err)
