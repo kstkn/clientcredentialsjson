@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package clientcredentialsjson is an adaptiation of golang.org/x/oauth2/clientcredentials
+// Package clientcredentialsjson is an adaptation of golang.org/x/oauth2/clientcredentials
 // to the scenario where auth server expects credentials in JSON body
 package clientcredentialsjson
 
